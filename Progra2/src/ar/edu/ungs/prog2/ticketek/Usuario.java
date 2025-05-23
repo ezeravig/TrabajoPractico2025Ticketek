@@ -2,6 +2,7 @@ package ar.edu.ungs.prog2.ticketek;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Objects;
 
 public class Usuario {
 	private String email;
@@ -51,4 +52,20 @@ public class Usuario {
 			throw new RuntimeException("La contraseña no coincide con la del dueño de la entrada");
 		EntradasCompradas.remove(entrada.getCodigo());
 	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(email);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Usuario other = (Usuario) obj;
+		return Objects.equals(email, other.email);
+	}
+	
 }

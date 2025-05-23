@@ -20,6 +20,7 @@ public class Sector {
 			}
 			this.capacidadMaxima = capacidad;
 			this.aumentoPrecio = aumentoPrecio;	
+			this.nombre = nombre;
 			;
 		}
 
@@ -43,7 +44,9 @@ public class Sector {
 			return precio/100*this.aumentoPrecio;
 			//Para saber cuanto es el n% de precio debemos hacer precio dividido 100 por n (precio/100*n)
 		}
-
+		public int cualEsMiCapacidad() {
+			return this.capacidadMaxima;
+		}
 
 }
 

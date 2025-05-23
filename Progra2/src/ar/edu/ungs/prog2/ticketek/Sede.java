@@ -49,25 +49,23 @@ public abstract class Sede  {
     public abstract boolean soyNumerada();
 
 
-	public void VenderEntrada() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	public boolean quedanEntradas(int cantidadEntradas, int cantYaVendidas) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	
 	
 	public  ArrayList<String> misSectores(){
-		ArrayList<String> misSectores = new ArrayList<>();
+		ArrayList<String> losSectores = new ArrayList<>();
 		for(Sector sector:this.sectores) {
-			misSectores.add(sector.getNombre());
+			losSectores.add(sector.getNombre());
 		}
-		return misSectores;
+		return losSectores;
 	}
     
+	public int espacioDelSector(String nombreSec) {
+		for(Sector sec:this.sectores) {
+			if(nombreSec.equals(sec.getNombre()))
+				return sec.cualEsMiCapacidad();		
+			}
+		throw new IllegalArgumentException("No existe un sector llamado "+nombreSec+" en la sede "+this.nombre);	
+	}
    
 }
 

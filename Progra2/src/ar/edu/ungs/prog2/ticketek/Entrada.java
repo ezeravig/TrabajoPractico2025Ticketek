@@ -1,5 +1,7 @@
 package ar.edu.ungs.prog2.ticketek;
 
+import java.util.Objects;
+
 public class Entrada implements IEntrada {
 
 
@@ -29,7 +31,8 @@ public class Entrada implements IEntrada {
 	}
 	@Override
 	public String ubicacion() {
-		if
+		if(numAsiento==0)
+			return "CAMPO";
 		return null;
 	}
 	@Override
@@ -45,6 +48,25 @@ public class Entrada implements IEntrada {
 	public String getCodigo() {
 		return "";
 		//Cambiar	
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(codigo, espectaculo, fecha, numAsiento, sector, usuarioComprador);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Entrada other = (Entrada) obj;
+		return Objects.equals(codigo, other.codigo) && Objects.equals(espectaculo, other.espectaculo)
+				&& Objects.equals(fecha, other.fecha) && numAsiento == other.numAsiento
+				&& Objects.equals(sector, other.sector) && Objects.equals(usuarioComprador, other.usuarioComprador);
 	}
 
 }

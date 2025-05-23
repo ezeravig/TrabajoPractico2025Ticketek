@@ -4,13 +4,12 @@ import java.util.ArrayList;
 
 public class EstadioFutbol extends Sede {
 
-	private int entradasYaVendidas;
 	
 	
 	public EstadioFutbol(String nombre, String direccion, int capacidadMaxima) {
 		super(capacidadMaxima, direccion, nombre);
 		this.sectores.add(new Sector("CAMPO",capacidadMaxima,0));
-		this.entradasYaVendidas = 0;
+		
 	}
 
 
@@ -44,13 +43,6 @@ public class EstadioFutbol extends Sede {
 		return false;
 	}
 
-	@Override
-	public boolean quedanEntradas(int cantidadEntradas, int cantYaVendidas) {
-		if(this.capacidadMaxima-cantYaVendidas > cantidadEntradas)
-			return true;
-		else
-			throw new RuntimeException("no quedan "+cantidadEntradas+" disponibles para el Estadio");
-	}
 
 
 
