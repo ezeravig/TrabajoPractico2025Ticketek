@@ -11,32 +11,24 @@ public class Espectaculo {
 	private String nombre;
 	private HashMap<Fecha, Funcion> funciones;// Cada funcion es en una sede distinta
 	private String idEspectaculo;
-	private Set<Sede> sedesYaUsadas;
+	
 
 	public Espectaculo(String nombre) {
 		super();
+		if(nombre.isEmpty())
+			throw new IllegalArgumentException("El nombre del Espectaculo no debe ser vacio");
 		this.nombre = nombre;
 		this.funciones = new HashMap<>();
 		this.idEspectaculo = getNumcod() + "";
 		setNumcod(1);
-		this.sedesYaUsadas = new HashSet<>();
 	}
 
 	public void agregarFuncion(Fecha fecha, Sede sede, double precio) {
 		if (existeFuncionEnFecha(fecha)) {
 			System.out.println("En la fecha " + fecha + " ya existe una funcion en " + this.nombre);
 			throw new RuntimeException("Este espectaculo ya tiene una funcion en la fecha que se paso");
-
-		}
-		if (sedesYaUsadas.contains(sede)) {
-			// System.out.println("la sede no se agrego por queya existi a"+this.nombre);
-			// throw new RuntimeException("Este espectaculo ya tiene una funcion en la sede
-			// que se paso");
-			//return;
-		}
+			}
 		funciones.put(fecha, new Funcion(fecha, sede, precio));
-		sedesYaUsadas.add(sede);
-
 	}
 
 	public LinkedList<Funcion> consultarFuncionesDisponibles() {
@@ -62,10 +54,6 @@ public class Espectaculo {
 
 	private static void setNumcod(int i) {
 		Espectaculo.numcod += i;
-	}
-
-	public boolean seUtilizoLaSede(Sede sede) {
-		return sedesYaUsadas.contains(sede);
 	}
 
 	public boolean existeFuncionEnFecha(Fecha fecha) {

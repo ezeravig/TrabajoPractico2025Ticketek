@@ -29,8 +29,17 @@ public class MiniEstadio extends Sede {
 
 		@Override
 		public boolean soyNumerada() {
-			// TODO Auto-generated method stub
 			return true;
+		}
+		@Override
+		public int buscarFila(int asiento, String sector) {
+			if(misSectores().contains(sector)) {
+				for(Sector sec:this.sectores) {
+					if(sec.getNombre().equals(sector))
+						return sec.cualFilaEs(asiento);
+				}
+			}
+			throw new RuntimeException("la sede"+this.nombre+" no tiene ningun sector llamado "+sector);
 		}
 
 }

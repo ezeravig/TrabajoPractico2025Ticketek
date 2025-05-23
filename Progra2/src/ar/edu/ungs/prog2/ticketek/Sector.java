@@ -2,10 +2,8 @@ package ar.edu.ungs.prog2.ticketek;
 
 public class Sector {
 	    private String nombre;
-	    private int nroFilas;
 	    private int asientosPorFila;
 	    private int aumentoPrecio;
-	    private boolean ultimaFilaMenosAsientos;
 	    private int asientosUltFila;
 	    private int capacidadMaxima;    
 	    
@@ -13,11 +11,6 @@ public class Sector {
 		public Sector(int asientosPorFila, String nombre, int capacidad, int aumentoPrecio) {
 			super();
 			this.asientosPorFila = asientosPorFila;
-			this.nroFilas = (int)Math.ceil(capacidad/asientosPorFila);
-			if(capacidad%asientosPorFila!=0) {
-				ultimaFilaMenosAsientos =true;
-				asientosUltFila = capacidad%asientosPorFila;
-			}
 			this.capacidadMaxima = capacidad;
 			this.aumentoPrecio = aumentoPrecio;	
 			this.nombre = nombre;
@@ -46,6 +39,14 @@ public class Sector {
 		}
 		public int cualEsMiCapacidad() {
 			return this.capacidadMaxima;
+		}
+
+		public int cualFilaEs(int asiento) {
+			if(asiento<this.capacidadMaxima) {
+				int fila =  (int)Math.ceil(this.capacidadMaxima/asientosPorFila);
+				return fila;
+			}else
+				throw new IllegalArgumentException(this.nombre+" no tiene elasiento "+asiento+" por que cuenta con "+this.capacidadMaxima+" asientos");
 		}
 
 }

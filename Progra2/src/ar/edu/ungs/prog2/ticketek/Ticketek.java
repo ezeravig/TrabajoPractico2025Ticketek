@@ -10,7 +10,7 @@ public class Ticketek implements ITicketek {
 	private HashMap<String,Usuario> Usuarios = new HashMap<>();
 	private HashMap<String,Espectaculo> Espectaculos = new HashMap<>();
 	private HashMap<String,Sede> Sedes = new HashMap<>();
-	private HashMap<String,Set<String>> SedesUsadasEnFecha =   new HashMap<>();
+	private HashMap<Fecha,Set<String>> SedesUsadasEnFecha =   new HashMap<>();//el set string podria cambiarse por un set<Sede>
 	
 	@Override
 	public void registrarSede(String nombre, String direccion, int capacidadMaxima) {
@@ -22,7 +22,7 @@ public class Ticketek implements ITicketek {
 		
 	}
 
-
+	
 	@Override
 	public void registrarSede(String nombre, String direccion, int capacidadMaxima, int asientosPorFila,
 			String[] sectores, int[] capacidad, int[] porcentajeAdicional) {
@@ -66,50 +66,59 @@ public class Ticketek implements ITicketek {
 
 	@Override
 	public void agregarFuncion(String nombreEspectaculo, String fecha, String sede, double precioBase) {
-		Espectaculo espectaculoSolicitado = obtenerEspectaculo(nombreEspectaculo);//si no existe el espectaculo arroja error 
+		Espectaculo espectaculoSolicitado = validarEspectaculo(nombreEspectaculo);//si no existe el espectaculo arroja error 
 		Sede lasede = existeLaSede(sede);// si la sede no existe genera una exepcion
-		Fecha laFecha = yaOcurrio(fecha);//Fijarse que la fecha en la que se quiere agregar la funcion no haya ocurrido
-		sedeDisponibleEnFecha(fecha,sede);//Chequea que la sede este disponible esa fecha y no haya otro espectaculo
-		//Chequear si es la unica funcion del espectaculoen ese da.Se encarga el Espectaculo 
+		Fecha laFecha = validarFecha(fecha);//Fijarse que la fecha tenga el formato correcto
+		sedeDisponibleEnFecha(laFecha,sede);//Chequea que la sede este disponible esa fecha y no haya otro espectaculo
 		espectaculoSolicitado.agregarFuncion(laFecha, lasede, precioBase);
 	}
 
 	@Override
 	public List<IEntrada> venderEntrada(String nombreEspectaculo, String fecha, String email, String contrasenia,
 			int cantidadEntradas) {
-		
+		if(cantidadEntradas<1) {
+			throw new IllegalArgumentException("Debe indicar cuantas entradas desa");
+		}
 		Usuario usuarioComprador = validarUsuario(email,contrasenia);//generaun error si hay algun error con los datos recibidos delusuario
-		Espectaculo espectaculoAVender = obtenerEspectaculo(nombreEspectaculo);
-		Fecha laFecha= yaOcurrio(fecha);
+		Espectaculo espectaculoAVender = validarEspectaculo(nombreEspectaculo);
+		Fecha laFecha = validarFecha(fecha);
+				yaOcurrio(laFecha);
 		Funcion laFuncionAVender = validarFuncion(espectaculoAVender,laFecha);
+		validarSedeNoNumerada(laFuncionAVender);
 		LinkedList<IEntrada> entradasVendidas = new LinkedList<>();
 		if(laFuncionAVender.quedanEntradas(cantidadEntradas)) {
-			for(int i = 0;i<cantidadEntradas; i++) {
+			for(int i = 1;i<=cantidadEntradas; i++) {
 				IEntrada entradaVendida = laFuncionAVender.venderEntrada(nombreEspectaculo,laFecha,"CAMPO",usuarioComprador);
 				usuarioComprador.entradaComprada((Entrada)entradaVendida);
 				entradasVendidas.add(entradaVendida);
 			}
-		}
-		
+		}else
+			throw new RuntimeException("A la funcion no le quedan "+cantidadEntradas+" entradas para vender");
 		return entradasVendidas;
-	}
-
-	private Funcion validarFuncion(Espectaculo espectaculoAVender, Fecha laFecha) {
-		if(!espectaculoAVender.existeFuncionEnFecha(laFecha)) {
-			throw new RuntimeException("No existe ninguna funcion programada parala fecha "+laFecha.toString()+" en el espectaculo "+ espectaculoAVender.getNombre());
-		}
-		if(espectaculoAVender.laFuncionEsNumerada(laFecha)) {//Chequea que la sede dela funcion en la fecha sea no numerada
-			throw new RuntimeException("La sede de la funcion en la fecha: "+laFecha.toString()+" tieneasientos, por favor indique cuales desea");
-		}
-		return espectaculoAVender.funcionDeLaFecha(laFecha);
 	}
 
 
 	@Override
 	public List<IEntrada> venderEntrada(String nombreEspectaculo, String fecha, String email, String contrasenia,
 			String sector, int[] asientos) {
-		// TODO Auto-generated method stub
-		return null;
+		if(asientos.length<1) {
+			throw new IllegalArgumentException("Debe indicar cuales asientos desea");
+		}
+		Usuario usuarioComprador = validarUsuario(email,contrasenia);//generaun error si hay algun error con los datos recibidos delusuario
+		Espectaculo espectaculoAVender = validarEspectaculo(nombreEspectaculo);
+		Fecha laFecha = validarFecha(fecha);
+		Funcion laFuncionAVender = validarFuncion(espectaculoAVender,laFecha);
+		validarSedeNumerada(laFuncionAVender);
+		LinkedList<IEntrada> entradasVendidas = new LinkedList<>();
+		if(laFuncionAVender.quedanLosAsientos(sector,asientos)) {
+			for(int i = 0;i<asientos.length; i++) {
+				IEntrada entradaVendida = laFuncionAVender.venderEntrada(nombreEspectaculo,laFecha,sector,usuarioComprador,asientos[i]);
+				usuarioComprador.entradaComprada((Entrada)entradaVendida);
+				entradasVendidas.add(entradaVendida);
+			}
+		}else
+			throw new RuntimeException("Algunos asientos ya fueron vendidos");
+		return entradasVendidas;
 	}
 
 	@Override
@@ -180,9 +189,7 @@ public class Ticketek implements ITicketek {
 	
 
 	private void errorSedeYaRegistrada(String sede) {
-
-		throw new RuntimeException("La sede: "+sede+" ya esta registrada");
-		
+		throw new RuntimeException("La sede: "+sede+" ya esta registrada");	
 	}
 	
 	private Sede existeLaSede(String sede) {
@@ -192,20 +199,15 @@ public class Ticketek implements ITicketek {
 			throw new RuntimeException("La sede:"+ sede+" no esta cargada en el sistema");
 		
 	}
-//	private void elEspectaculoUtilizoSede(Sede sede,Espectaculo espectaculo) {
-//		if(!espectaculo.seUtilizoLaSede(sede)) {
-//			return;
-//		}else
-//		 	throw new RuntimeException("La sede "+sede.getNombre()+" ya se utilizo para una funcion en el espectaculo");	
-//	}
 	
-	private Espectaculo obtenerEspectaculo(String nombre) {
+	private Espectaculo validarEspectaculo(String nombre) {
 		if(Espectaculos.containsKey(nombre)) {
 			return Espectaculos.get(nombre);
 		}else
 		 	throw new RuntimeException("El espectaculo con el nombre: "+nombre+" no existe");
 	}
-	private void sedeDisponibleEnFecha(String fecha, String sede) {
+	
+	private void sedeDisponibleEnFecha(Fecha fecha, String sede) {
 		if(SedesUsadasEnFecha.containsKey(fecha)) {
 			Set<String> sedesEnLaFecha = SedesUsadasEnFecha.get(fecha); 
 			if(sedesEnLaFecha.contains(sede)) {
@@ -220,14 +222,20 @@ public class Ticketek implements ITicketek {
 			SedesUsadasEnFecha.put(fecha, sedes);
 		}				
 	}
-
-	private Fecha yaOcurrio(String fecha) {
-		Fecha devolver = new Fecha(fecha);
-		if(devolver.yaPaso()) {
-			//throw new RuntimeException("la fecha ingresada:"+fecha+" ya ocurrio");
+	
+	private Fecha validarFecha(String fecha) {
+		if(Fecha.esFormatoValido(fecha)) {
+			return new Fecha(fecha);
+		}
+		throw new IllegalArgumentException("la fecha ingresada:"+fecha+" ya ocurrio");
+	}
+	
+	private Fecha yaOcurrio(Fecha fecha) {	
+		if(fecha.yaPaso()) {
+			throw new RuntimeException("la fecha ingresada:"+fecha+" ya ocurrio");
 			//System.out.println("la fecha: "+fecha+" ya ocurrio");
 		}
-		return devolver;
+		return fecha;
 	}
 	
 	private Usuario validarUsuario(String email, String contrasenia) {
@@ -237,5 +245,26 @@ public class Ticketek implements ITicketek {
 			throw new RuntimeException("el usuario: "+email+" no esta registrado");
 		}
 		return Usuarios.get(email);
+	}
+	
+	private Funcion validarFuncion(Espectaculo espectaculoAVender, Fecha laFecha) {
+		if(!espectaculoAVender.existeFuncionEnFecha(laFecha)) {
+			throw new RuntimeException("No existe ninguna funcion programada parala fecha "+laFecha.toString()+" en el espectaculo "+ espectaculoAVender.getNombre());
+		}
+		return espectaculoAVender.funcionDeLaFecha(laFecha);
+	}
+
+	private void validarSedeNoNumerada(Funcion funcion) {
+		if(funcion.laSedeEsNoNumerada()) {
+			return;
+		}
+		throw new IllegalArgumentException("la funcion que desea comprar es numerada,indique los asientos que desea");
+	}
+	
+	private void validarSedeNumerada(Funcion funcion) {
+		if(funcion.laSedeEsNumerada()) {
+			return;
+		}
+		throw new IllegalArgumentException("la funcion que desea comprar es numerada,indique los asientos que desea");
 	}
 }

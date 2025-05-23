@@ -21,21 +21,21 @@ public class Fecha {
         }
     }
 
-    public boolean esAnteriorA(Fecha otra) {
-        return getFechaLocalDate().isBefore(otra.getFechaLocalDate());
-    }
-
-    public boolean esAnteriorA(String otraFechaStr) {
-        return esAnteriorA(new Fecha(otraFechaStr));
-    }
-
-    public boolean esPosteriorA(Fecha otra) {
-        return getFechaLocalDate().isAfter(otra.getFechaLocalDate());
-    }
-
-    public boolean esPosteriorA(String otraFechaStr) {
-        return esPosteriorA(new Fecha(otraFechaStr));
-    }
+//    public boolean esAnteriorA(Fecha otra) {
+//        return getFechaLocalDate().isBefore(otra.getFechaLocalDate());
+//    }
+//
+//    public boolean esAnteriorA(String otraFechaStr) {
+//        return esAnteriorA(new Fecha(otraFechaStr));
+//    }
+//
+//    public boolean esPosteriorA(Fecha otra) {
+//        return getFechaLocalDate().isAfter(otra.getFechaLocalDate());
+//    }
+//
+//    public boolean esPosteriorA(String otraFechaStr) {
+//        return esPosteriorA(new Fecha(otraFechaStr));
+//    }
 
     public boolean esIgualA(Fecha otra) {
         return getFechaLocalDate().isEqual(otra.getFechaLocalDate());
@@ -57,6 +57,14 @@ public class Fecha {
         return fechaStr;
     }
 
+    public static boolean esFormatoValido(String fecha) {
+        try {
+            LocalDate.parse(fecha, FORMATO_CORTO);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

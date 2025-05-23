@@ -17,7 +17,16 @@ public class Teatro extends Sede {
 		public boolean soyNumerada() {
 			return true;
 		}
-	
+		@Override
+		public int buscarFila(int asiento, String sector) {
+			if(misSectores().contains(sector)) {
+				for(Sector sec:this.sectores) {
+					if(sec.getNombre().equals(sector))
+						return sec.cualFilaEs(asiento);
+				}
+			}
+			throw new RuntimeException("la sede"+this.nombre+" no tiene ningun sector llamado "+sector);
+		}
 	}
 
 

@@ -66,6 +66,12 @@ public abstract class Sede  {
 			}
 		throw new IllegalArgumentException("No existe un sector llamado "+nombreSec+" en la sede "+this.nombre);	
 	}
+
+
+	public int buscarFila(int asiento, String sector) {
+		
+		throw new RuntimeException("no tiene filas");
+	}
    
 }
 
