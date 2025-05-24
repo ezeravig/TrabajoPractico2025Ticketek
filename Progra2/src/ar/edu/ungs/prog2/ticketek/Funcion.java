@@ -1,5 +1,6 @@
 package ar.edu.ungs.prog2.ticketek;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -32,12 +33,6 @@ public class Funcion {
 	public void calcularPrecioPorSector() {
 	}
 
-	public void registrarVenta() {
-	}
-
-	public void verificarDisponibilidad() {
-	}
-
 	public Fecha getFecha() {
 		// TODO Auto-generated method stub
 		return fecha;
@@ -53,7 +48,6 @@ public class Funcion {
 	}
 
 	public Sede miSede() {
-
 		return this.sede;
 	}
 
@@ -101,8 +95,8 @@ public class Funcion {
 	}
 	public IEntrada venderEntrada(String nombreEspectaculo, Fecha laFecha, String sector, Usuario usuarioComprador,int asiento) {
 		int fila = this.sede.buscarFila(asiento, sector);
-		Entrada entradaGenerada = new Entrada(nombreEspectaculo, laFecha, sector, asiento, fila, usuarioComprador, this.precioBase,
-				asiento);
+		Entrada entradaGenerada = new Entrada(nombreEspectaculo, laFecha, sector, asiento, fila, usuarioComprador,
+				this.sede.calcularPrecioParaEntradaEnSector(precioBase, sector),asiento);
 		ocuparAsiento(sector,asiento);
 		guardarEntrada(entradaGenerada, sector);
 		return entradaGenerada;
@@ -120,9 +114,14 @@ public class Funcion {
 	}
 
 	private void guardarEntrada(IEntrada entradaGenerada, String sector) {
-		if(this.entradasPorSectorVendidas.containsKey(sector))
+		if(this.entradasPorSectorVendidas.containsKey(sector)) {
 			this.entradasPorSectorVendidas.get(sector).add(entradaGenerada);
-	}
+			return;
+			
+		}
+		throw new RuntimeException("El sector indicado no existe  ");
+		}
+
 
 	public boolean laSedeEsNoNumerada() {
 		if (this.sede.soyNumerada()) {
@@ -136,7 +135,24 @@ public class Funcion {
 		return this.sede.soyNumerada();
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder funcion= new StringBuilder();
+		funcion.append(" - (");
+		funcion.append(this.fecha.toString());
+		funcion.append(") ");
+		ArrayList<Integer> cantidadVendida= new ArrayList<Integer>();
+		for(String sector : this.sede.misSectores()){
+			cantidadVendida.add(this.entradasPorSectorVendidas.get(sector).size());
+
+		}
+		funcion.append(this.sede.formatoFuncion(cantidadVendida));		
+		funcion.append("\n");		
+		return funcion.toString();
+	}
+
 	//podemos agregar una funcion que nos retorne boolean s el sector existe, paraahorrar codigo
+	
 	
 
 }

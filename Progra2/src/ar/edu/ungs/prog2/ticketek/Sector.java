@@ -49,6 +49,20 @@ public class Sector {
 				throw new IllegalArgumentException(this.nombre+" no tiene elasiento "+asiento+" por que cuenta con "+this.capacidadMaxima+" asientos");
 		}
 
+		public String formatoFuncion(Integer vendida) {
+			StringBuilder st=new StringBuilder();
+			st.append(" ");
+			st.append(this.nombre);
+			st.append(": ");
+			st.append(vendida);
+			st.append("/");
+			st.append(this.capacidadMaxima);
+			st.append(" |");
+			return st.toString();
+		}
+
+		
+
 }
 
 

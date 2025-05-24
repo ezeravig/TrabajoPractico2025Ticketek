@@ -27,6 +27,18 @@ public class Teatro extends Sede {
 			}
 			throw new RuntimeException("la sede"+this.nombre+" no tiene ningun sector llamado "+sector);
 		}
+		
+		@Override
+		public String formatoFuncion(ArrayList<Integer> cantidadVendida) {
+			StringBuilder st=new StringBuilder(this.nombre);
+			st.append(" -");
+			for(int i=0 ;i<this.sectores.size();i++) {
+				st.append(this.sectores.get(i).formatoFuncion(cantidadVendida.get(i)));
+			}
+			st.setLength(st.length()-2);
+			
+			return st.toString();
+		}
 	}
 
 

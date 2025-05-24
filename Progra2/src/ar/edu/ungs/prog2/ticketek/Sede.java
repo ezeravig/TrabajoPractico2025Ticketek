@@ -22,13 +22,6 @@ public abstract class Sede  {
 		this.sectores= new ArrayList<>();
 		
     }
-
-
-	public int calcularPrecioSector(int precioBase) {
-    	
-    	return 0;
-    }
-    
     
     // Suma lo recaudado por cada sector 
     public double calcularPrecioTotal() {
@@ -71,6 +64,17 @@ public abstract class Sede  {
 	public int buscarFila(int asiento, String sector) {
 		
 		throw new RuntimeException("no tiene filas");
+	}
+
+
+	public abstract String formatoFuncion(ArrayList<Integer> cantidadVendida) ;
+	
+	public double calcularPrecioParaEntradaEnSector(double precio,String nombreSec) {
+		for(Sector sec:this.sectores) {
+			if(nombreSec.equals(sec.getNombre()))
+				return sec.calcularPrecio(precio);		
+		}
+		throw new RuntimeException("no existe ese sector en la sede");
 	}
    
 }

@@ -42,7 +42,15 @@ public class EstadioFutbol extends Sede {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
+	@Override
+	public String formatoFuncion(ArrayList<Integer> cantidadVendida) {
+		StringBuilder st=new StringBuilder(this.nombre);
+		st.append(" - ");
+		st.append(cantidadVendida.get(0));
+		st.append("/");
+		st.append(this.capacidadMaxima);
+		return st.toString();		
+	}
 
 
 

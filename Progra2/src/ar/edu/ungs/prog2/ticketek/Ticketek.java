@@ -123,8 +123,9 @@ public class Ticketek implements ITicketek {
 
 	@Override
 	public String listarFunciones(String nombreEspectaculo) {
-		// TODO Auto-generated method stub
-		return null;
+		Espectaculo aListar = validarEspectaculo(nombreEspectaculo);
+		String listadoFun = aListar.listarFunciones();
+		return listadoFun;
 	}
 
 	@Override

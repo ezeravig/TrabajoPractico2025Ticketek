@@ -77,4 +77,12 @@ public class Espectaculo {
 	public String getNombre() {
 		return this.nombre;
 	}
+
+	public String listarFunciones() {
+		StringBuilder listado = new StringBuilder();
+		for(Funcion funcion: this.funciones.values()) {
+			listado.append(funcion.toString());
+		}
+		return listado.toString();
+	}
 }
