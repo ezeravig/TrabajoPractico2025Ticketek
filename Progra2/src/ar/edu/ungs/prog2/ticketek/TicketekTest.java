@@ -285,10 +285,9 @@ public class TicketekTest{
     public void ej15_ConsultarEntradasVendidasParaEspectaculo() {
         // Para "Stand up Comedy" se vendieron 12 entradas
     	// y para "Coldplay en vivo" se vendieron 6
-
+    	
         assertEquals(12, ticketek.listarEntradasEspectaculo("Stand up Comedy").size());
         assertEquals(6, ticketek.listarEntradasEspectaculo("Coldplay en vivo").size());
-
     }
 
     

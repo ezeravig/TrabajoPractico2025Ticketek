@@ -81,8 +81,9 @@ public class Funcion {
 	//sedes no Numeradas
 	public IEntrada venderEntrada(String nombreEspectaculo, Fecha laFecha, String sector, Usuario usuarioComprador) {
 		int espacioDisponibleParaCodigo = buscarEspacioDisponible();
-		Entrada entradaGenerada = new Entrada(nombreEspectaculo, laFecha, sector, 0,0, usuarioComprador,
+		Entrada entradaGenerada = new Entrada(nombreEspectaculo, laFecha,this.sede.getNombre(), sector, espacioDisponibleParaCodigo,0, usuarioComprador,
 				this.sede.calcularPrecioParaEntradaEnSector(this.precioBase, "CAMPO"),espacioDisponibleParaCodigo);
+		//en asento pongo eso por que sino no funciona el hash set, pero comoel sector es campo el asiento no se usa enlaubicacion
 		guardarEntrada(entradaGenerada, "CAMPO",espacioDisponibleParaCodigo);
 		return (IEntrada) entradaGenerada;
 	}
@@ -101,7 +102,7 @@ public class Funcion {
 	//Sedes Numeradas
 	public IEntrada venderEntrada(String nombreEspectaculo, Fecha laFecha, String sector, Usuario usuarioComprador,int asiento) {
 		int fila = this.sede.buscarFila(asiento, sector);
-		Entrada entradaGenerada = new Entrada(nombreEspectaculo, laFecha, sector, asiento, fila, usuarioComprador,
+		Entrada entradaGenerada = new Entrada(nombreEspectaculo, laFecha,this.sede.getNombre(), sector, asiento, fila, usuarioComprador,
 				this.sede.calcularPrecioParaEntradaEnSector(this.precioBase, sector),asiento-1);
 		guardarEntrada(entradaGenerada, sector,asiento-1);
 		return entradaGenerada;

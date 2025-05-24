@@ -136,8 +136,8 @@ public class Ticketek implements ITicketek {
 
 	@Override
 	public List<IEntrada> listarEntradasFuturas(String email, String contrasenia) {
-		// TODO Auto-generated method stub
-		return null;
+		Usuario elUsuario = validarUsuario(email, contrasenia);
+		return elUsuario.ConsultarentradasFuturas();
 	}
 
 	@Override

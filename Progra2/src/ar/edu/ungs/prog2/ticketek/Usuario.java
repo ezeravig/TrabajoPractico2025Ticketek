@@ -1,15 +1,17 @@
 package ar.edu.ungs.prog2.ticketek;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public class Usuario {
 	private String email;
 	private String nombre,apellido;
 	private String contrasenia;
-	private HashMap<String,Entrada> EntradasCompradas;
+	private Set<Entrada> EntradasCompradas;
 	
 	public Usuario(String email, String nombre, String apellido, String contrasenia) {
 		super();
@@ -17,20 +19,20 @@ public class Usuario {
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.contrasenia = contrasenia ;
-		this.EntradasCompradas = new HashMap<>();
+		this.EntradasCompradas = new HashSet<>();
 		
 	}
-	public LinkedList<IEntrada> Consultarentradas(){
-		LinkedList<IEntrada> misEntradas = new LinkedList<>();
-		for(Entrada entrada: EntradasCompradas.values()) {
+	public List<IEntrada> Consultarentradas(){
+		List<IEntrada> misEntradas = new LinkedList<>();
+		for(Entrada entrada: EntradasCompradas) {
 			misEntradas.add(entrada);
 		}
 		return misEntradas;
 	}
 	
-	public LinkedList<Entrada> ConsultarentradasFuturas(){
-		LinkedList<Entrada> futuras = new LinkedList<>();
-		for(Entrada entrada: EntradasCompradas.values()) {
+	public List<IEntrada> ConsultarentradasFuturas(){
+		List<IEntrada> futuras = new LinkedList<>();
+		for(Entrada entrada: EntradasCompradas) {
 			if(entrada.esFutura())
 				futuras.add(entrada);
 		}
@@ -39,7 +41,7 @@ public class Usuario {
 	}
 	
 	public void entradaComprada(Entrada entrada) {
-		EntradasCompradas.put(entrada.getCodigo(),entrada);
+		EntradasCompradas.add(entrada);
 	}
 	
 	public boolean ValidarContrasenia(String contrasenia) {
@@ -51,7 +53,7 @@ public class Usuario {
 	public void AnularEntrada(Entrada entrada, String contrasenia) {
 		if(!ValidarContrasenia(contrasenia))
 			throw new RuntimeException("La contraseña no coincide con la del dueño de la entrada");
-		EntradasCompradas.remove(entrada.getCodigo());
+		EntradasCompradas.remove(entrada);
 	}
 	@Override
 	public int hashCode() {

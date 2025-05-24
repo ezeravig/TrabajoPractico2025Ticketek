@@ -14,8 +14,10 @@ public class Entrada implements IEntrada {
 	    private int fila;
 	    private Usuario usuarioComprador;
 	    private double precio;
+	    private String sede;
 	
-	    public Entrada(String espectaculo, Fecha fecha, String sector,int numAsiento, int fila, Usuario usuarioComprador, double precio, int odigo) {
+	    public Entrada(String espectaculo, Fecha fecha,String sede, String sector,int numAsiento,
+	    		int fila, Usuario usuarioComprador, double precio, int codigo) {
 			super();
 			this.espectaculo = espectaculo;
 			this.fecha = fecha;
@@ -24,6 +26,8 @@ public class Entrada implements IEntrada {
 			this.fila = fila;
 			this.usuarioComprador = usuarioComprador;
 			this.precio = precio;
+			this.sede =sede;
+			this.codigo = codigo+"";
 		}
 	    
 	@Override
@@ -33,18 +37,40 @@ public class Entrada implements IEntrada {
 	}
 	@Override
 	public String ubicacion() {
-		if(numAsiento==0)
-			return "CAMPO";
-		return null;
+		if(this.sector.equals("CAMPO"))
+			return this.sector;
+		StringBuilder ubi = new StringBuilder();
+		ubi.append(" Platea ");
+		ubi.append(this.sector);
+		ubi.append(" f:");
+		ubi.append(this.fila);
+		ubi.append(" a:");
+		ubi.append(this.numAsiento);
+		return ubi.toString();
 	}
 	@Override
 	public String toString() {
-		return " ";
+		StringBuilder st = new StringBuilder();
+		st.append("- ");
+		st.append(this.codigo);
+		st.append(" - ");
+		st.append(this.espectaculo);
+		st.append(" - ");
+		st.append(this.fecha.toString());
+		st.append(" - ");
+		st.append(this.sede);
+		if(!esFutura()) {
+			st.append(" P");
+		}
+		st.append(" - ");
+		st.append(ubicacion());
+		st.substring(1);
+		return st.toString();
 		
 	}
 	
 	public boolean esFutura() {
-		return true;
+		return !fecha.yaPaso();
 		//Cambiar	
 		}
 	public String getCodigo() {
