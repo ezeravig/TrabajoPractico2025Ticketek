@@ -87,7 +87,7 @@ public class Ticketek implements ITicketek {
 		LinkedList<IEntrada> entradasVendidas = new LinkedList<>();
 		if(laFuncionAVender.quedanEntradas(cantidadEntradas)) {
 			for(int i = 1;i<=cantidadEntradas; i++) {
-				IEntrada entradaVendida = laFuncionAVender.venderEntrada(nombreEspectaculo,laFecha,"CAMPO",usuarioComprador);
+				IEntrada entradaVendida = laFuncionAVender.venderEntrada(nombreEspectaculo,laFecha,"CAMPO",email);
 				usuarioComprador.entradaComprada((Entrada)entradaVendida);
 				entradasVendidas.add(entradaVendida);
 			}
@@ -111,7 +111,7 @@ public class Ticketek implements ITicketek {
 		LinkedList<IEntrada> entradasVendidas = new LinkedList<>();
 		if(laFuncionAVender.quedanLosAsientos(sector,asientos)) {
 			for(int i = 0;i<asientos.length; i++) {
-				IEntrada entradaVendida = laFuncionAVender.venderEntrada(nombreEspectaculo,laFecha,sector,usuarioComprador,asientos[i]);
+				IEntrada entradaVendida = laFuncionAVender.venderEntrada(nombreEspectaculo,laFecha,sector,email,asientos[i]);
 				usuarioComprador.entradaComprada((Entrada)entradaVendida);
 				entradasVendidas.add(entradaVendida);
 			}
@@ -148,8 +148,17 @@ public class Ticketek implements ITicketek {
 
 	@Override
 	public boolean anularEntrada(IEntrada entrada, String contrasenia) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean laAnule = true;
+		Entrada laEntrada = (Entrada)entrada;
+		if(!laEntrada.esFutura()) {
+			return false;
+		}
+		Usuario usuarioDueño = validarUsuario(laEntrada.miComprador(), contrasenia);//la Entrada tiene a su usuario
+		laAnule &= usuarioDueño.anularEntrada(laEntrada, contrasenia);
+		Espectaculo espectDeLaEntrada = validarEspectaculo(laEntrada.miEspectaulo());
+		Funcion funcionDeLaEntrada = validarFuncion(espectDeLaEntrada, laEntrada.cuandoEs());
+		laAnule &= funcionDeLaEntrada.anularEntrada(laEntrada);
+		return laAnule;
 	}
 
 	@Override

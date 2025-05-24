@@ -12,12 +12,12 @@ public class Entrada implements IEntrada {
 	    private String sector;
 	    private int numAsiento;
 	    private int fila;
-	    private Usuario usuarioComprador;
+	    private String usuarioComprador;
 	    private double precio;
 	    private String sede;
 	
 	    public Entrada(String espectaculo, Fecha fecha,String sede, String sector,int numAsiento,
-	    		int fila, Usuario usuarioComprador, double precio, int codigo) {
+	    		int fila, String usuarioComprador, double precio, int codigo) {
 			super();
 			this.espectaculo = espectaculo;
 			this.fecha = fecha;
@@ -69,6 +69,10 @@ public class Entrada implements IEntrada {
 		
 	}
 	
+	public String miComprador() {
+		return this.usuarioComprador;
+	}
+	
 	public boolean esFutura() {
 		return !fecha.yaPaso();
 		//Cambiar	
@@ -95,6 +99,23 @@ public class Entrada implements IEntrada {
 		return Objects.equals(codigo, other.codigo) && Objects.equals(espectaculo, other.espectaculo)
 				&& Objects.equals(fecha, other.fecha) && numAsiento == other.numAsiento
 				&& Objects.equals(sector, other.sector) && Objects.equals(usuarioComprador, other.usuarioComprador);
+	}
+
+	public String miEspectaulo() {
+		return this.espectaculo;
+	}
+	
+	public Fecha cuandoEs() {
+		return this.fecha;
+	}
+
+	public int cualEsMiEspacio() {
+		return this.numAsiento;
+		
+	}
+
+	public String cualSectorEstoy() {
+		return this.sector;
 	}
 
 }

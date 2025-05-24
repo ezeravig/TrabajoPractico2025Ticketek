@@ -50,10 +50,14 @@ public class Usuario {
 		}
 		throw new RuntimeException("La ontraseña "+contrasenia+" esincorrecta");
 	}
-	public void AnularEntrada(Entrada entrada, String contrasenia) {
+	public boolean anularEntrada(Entrada entrada, String contrasenia) {
 		if(!ValidarContrasenia(contrasenia))
 			throw new RuntimeException("La contraseña no coincide con la del dueño de la entrada");
-		EntradasCompradas.remove(entrada);
+		if(this.EntradasCompradas.contains(entrada)) {
+			this.EntradasCompradas.remove(entrada);
+			return true;
+		}
+		return false;
 	}
 	@Override
 	public int hashCode() {

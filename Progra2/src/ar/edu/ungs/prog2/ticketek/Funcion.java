@@ -79,7 +79,7 @@ public class Funcion {
 		return false;
 	}
 	//sedes no Numeradas
-	public IEntrada venderEntrada(String nombreEspectaculo, Fecha laFecha, String sector, Usuario usuarioComprador) {
+	public IEntrada venderEntrada(String nombreEspectaculo, Fecha laFecha, String sector, String usuarioComprador) {
 		int espacioDisponibleParaCodigo = buscarEspacioDisponible();
 		Entrada entradaGenerada = new Entrada(nombreEspectaculo, laFecha,this.sede.getNombre(), sector, espacioDisponibleParaCodigo,0, usuarioComprador,
 				this.sede.calcularPrecioParaEntradaEnSector(this.precioBase, "CAMPO"),espacioDisponibleParaCodigo);
@@ -100,7 +100,7 @@ public class Funcion {
 		throw new RuntimeException("No hay espacio disponible en el CAMPO");
 	}
 	//Sedes Numeradas
-	public IEntrada venderEntrada(String nombreEspectaculo, Fecha laFecha, String sector, Usuario usuarioComprador,int asiento) {
+	public IEntrada venderEntrada(String nombreEspectaculo, Fecha laFecha, String sector, String usuarioComprador,int asiento) {
 		int fila = this.sede.buscarFila(asiento, sector);
 		Entrada entradaGenerada = new Entrada(nombreEspectaculo, laFecha,this.sede.getNombre(), sector, asiento, fila, usuarioComprador,
 				this.sede.calcularPrecioParaEntradaEnSector(this.precioBase, sector),asiento-1);
@@ -168,6 +168,16 @@ public class Funcion {
 			
 		return entradasYaVendidas;
 		
+	}
+
+	public boolean anularEntrada(Entrada laEntrada) {
+		int lugarDeEntrada = laEntrada.cualEsMiEspacio();
+		String sector = laEntrada.cualSectorEstoy();
+		if(this.entradasPorSectorVendidas.get(sector).get(lugarDeEntrada).equals(laEntrada)) {
+			this.entradasPorSectorVendidas.get(sector).set(lugarDeEntrada,null);
+			return true;
+		}
+		throw new RuntimeException("El lugar ya estaba des ocupado la Entrada no era valida");
 	}
 
 }
