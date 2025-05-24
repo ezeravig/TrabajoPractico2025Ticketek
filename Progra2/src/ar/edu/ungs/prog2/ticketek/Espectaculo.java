@@ -85,4 +85,11 @@ public class Espectaculo {
 		}
 		return listado.toString();
 	}
+
+	public LinkedList<IEntrada> todasLasEntradas() {
+		LinkedList<IEntrada> todasLasEntradas = new LinkedList<>();
+		for(Funcion funcion:this.funciones.values())
+			todasLasEntradas.addAll(funcion.entradasVendidas());
+		return todasLasEntradas;
+	}
 }

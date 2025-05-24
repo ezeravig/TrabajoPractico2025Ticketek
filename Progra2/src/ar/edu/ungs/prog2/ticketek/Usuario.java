@@ -2,6 +2,7 @@ package ar.edu.ungs.prog2.ticketek;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 public class Usuario {
@@ -19,8 +20,8 @@ public class Usuario {
 		this.EntradasCompradas = new HashMap<>();
 		
 	}
-	public LinkedList<Entrada> Consultarentradas(){
-		LinkedList<Entrada> misEntradas = new LinkedList<>();
+	public LinkedList<IEntrada> Consultarentradas(){
+		LinkedList<IEntrada> misEntradas = new LinkedList<>();
 		for(Entrada entrada: EntradasCompradas.values()) {
 			misEntradas.add(entrada);
 		}
@@ -66,6 +67,10 @@ public class Usuario {
 			return false;
 		Usuario other = (Usuario) obj;
 		return Objects.equals(email, other.email);
+	}
+	@Override 
+	public String toString() {
+		return email;
 	}
 	
 }

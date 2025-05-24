@@ -82,7 +82,6 @@ public class Ticketek implements ITicketek {
 		Usuario usuarioComprador = validarUsuario(email,contrasenia);//generaun error si hay algun error con los datos recibidos delusuario
 		Espectaculo espectaculoAVender = validarEspectaculo(nombreEspectaculo);
 		Fecha laFecha = validarFecha(fecha);
-				yaOcurrio(laFecha);
 		Funcion laFuncionAVender = validarFuncion(espectaculoAVender,laFecha);
 		validarSedeNoNumerada(laFuncionAVender);
 		LinkedList<IEntrada> entradasVendidas = new LinkedList<>();
@@ -130,8 +129,9 @@ public class Ticketek implements ITicketek {
 
 	@Override
 	public List<IEntrada> listarEntradasEspectaculo(String nombreEspectaculo) {
-		// TODO Auto-generated method stub
-		return null;
+		Espectaculo elEspectaculo = validarEspectaculo(nombreEspectaculo);
+		LinkedList<IEntrada> todasLasEntradasDelEspectaculo = elEspectaculo.todasLasEntradas();
+		return todasLasEntradasDelEspectaculo;
 	}
 
 	@Override
@@ -142,8 +142,8 @@ public class Ticketek implements ITicketek {
 
 	@Override
 	public List<IEntrada> listarTodasLasEntradasDelUsuario(String email, String contrasenia) {
-		// TODO Auto-generated method stub
-		return null;
+		Usuario elUsuario = validarUsuario(email, contrasenia);
+		return elUsuario.Consultarentradas();
 	}
 
 	@Override
@@ -229,14 +229,6 @@ public class Ticketek implements ITicketek {
 			return new Fecha(fecha);
 		}
 		throw new IllegalArgumentException("la fecha ingresada:"+fecha+" ya ocurrio");
-	}
-	
-	private Fecha yaOcurrio(Fecha fecha) {	
-		if(fecha.yaPaso()) {
-			throw new RuntimeException("la fecha ingresada:"+fecha+" ya ocurrio");
-			//System.out.println("la fecha: "+fecha+" ya ocurrio");
-		}
-		return fecha;
 	}
 	
 	private Usuario validarUsuario(String email, String contrasenia) {

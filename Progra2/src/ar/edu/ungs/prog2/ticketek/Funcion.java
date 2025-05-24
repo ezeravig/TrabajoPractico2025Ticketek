@@ -1,9 +1,11 @@
 package ar.edu.ungs.prog2.ticketek;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Set;
 
 public class Funcion {
@@ -11,10 +13,11 @@ public class Funcion {
 	private Sede sede;
 	private Fecha fecha;
 	private double precioBase;
-	private HashMap<String, Set<IEntrada>> entradasPorSectorVendidas;
-	private HashMap<String, Set<Integer>> espaciosDisponibles;// En lasnumeras representa a losasientos, en
+	private HashMap<String, ArrayList<IEntrada>> entradasPorSectorVendidas;
+	// En lasnumeras representa a losasientos, en
 																// lasnonumeradas El numero de entrada que se vende
 	// pero todasson de sectorCAMPO y se puede estar en cualquier parte delmismo
+	
 
 	public Funcion(Fecha fecha, Sede sede, double precioBase) {
 		super();
@@ -22,11 +25,9 @@ public class Funcion {
 		this.fecha = fecha;
 		this.precioBase = precioBase;
 		this.entradasPorSectorVendidas = new HashMap<>();
-		this.espaciosDisponibles = new HashMap<>();
 		for (String sector : this.sede.misSectores()) {
-			this.entradasPorSectorVendidas.put(sector, new HashSet<>());
-			this.espaciosDisponibles.put(sector, generarEspacioDisponible(this.sede.espacioDelSector(sector)));
-
+			this.entradasPorSectorVendidas.put
+			(sector, new ArrayList<IEntrada>(Collections.nCopies(this.sede.espacioDelSector(sector), null)));
 		}
 	}
 
@@ -50,16 +51,18 @@ public class Funcion {
 	public Sede miSede() {
 		return this.sede;
 	}
-
-	private static Set<Integer> generarEspacioDisponible(int espacio) {
-		Set<Integer> espacioCreado = new HashSet<>();
-		for (int i = 1; i <= espacio; i++)
-			espacioCreado.add(i);
-		return espacioCreado;
-	}
-
+	
 	public boolean quedanEntradas(int cantidadEntradas) {
-		return this.espaciosDisponibles.get("CAMPO").size() > cantidadEntradas;
+		int espacioDisponible=0;
+		for(IEntrada espacio:this.entradasPorSectorVendidas.get("CAMPO")) {
+			if((Entrada)espacio==null) {
+				espacioDisponible++;
+			} 	
+			if(espacioDisponible>=cantidadEntradas)
+				return true;
+		}
+		System.out.println("termine");
+			return false;
 	}
 
 	public boolean quedanLosAsientos(String sector, int[] asientos) {
@@ -71,51 +74,44 @@ public class Funcion {
 	}
 
 	public boolean quedaElAsiento(String sector, int asiento) {
-		return this.espaciosDisponibles.get(sector).contains(asiento);
+		if(this.entradasPorSectorVendidas.get(sector).get(asiento)==null)
+			return true;
+		return false;
 	}
-
+	//sedes no Numeradas
 	public IEntrada venderEntrada(String nombreEspectaculo, Fecha laFecha, String sector, Usuario usuarioComprador) {
 		int espacioDisponibleParaCodigo = buscarEspacioDisponible();
-		Entrada entradaGenerada = new Entrada(nombreEspectaculo, laFecha, sector, 0,0, usuarioComprador, this.precioBase,
-				espacioDisponibleParaCodigo);
-		guardarEntrada(entradaGenerada, "CAMPO");
+		Entrada entradaGenerada = new Entrada(nombreEspectaculo, laFecha, sector, 0,0, usuarioComprador,
+				this.sede.calcularPrecioParaEntradaEnSector(this.precioBase, "CAMPO"),espacioDisponibleParaCodigo);
+		guardarEntrada(entradaGenerada, "CAMPO",espacioDisponibleParaCodigo);
 		return (IEntrada) entradaGenerada;
 	}
 
 	private int buscarEspacioDisponible() {
-		int numeroEspacio;
-		Set<Integer> buscarEspacio = this.espaciosDisponibles.get("CAMPO");
-		Iterator<Integer> iterador = buscarEspacio.iterator();
+		ArrayList<IEntrada> buscarEspacio = this.entradasPorSectorVendidas.get("CAMPO");
+		Iterator<IEntrada> iterador = buscarEspacio.iterator();
+		int numeroEspacio=0;
 		while (iterador.hasNext()) {
-			numeroEspacio = iterador.next();
-			iterador.remove();
-			return numeroEspacio;
+			if(iterador.next()==null)
+				return numeroEspacio;
+			numeroEspacio++;
 		}
 		throw new RuntimeException("No hay espacio disponible en el CAMPO");
 	}
+	//Sedes Numeradas
 	public IEntrada venderEntrada(String nombreEspectaculo, Fecha laFecha, String sector, Usuario usuarioComprador,int asiento) {
 		int fila = this.sede.buscarFila(asiento, sector);
 		Entrada entradaGenerada = new Entrada(nombreEspectaculo, laFecha, sector, asiento, fila, usuarioComprador,
-				this.sede.calcularPrecioParaEntradaEnSector(precioBase, sector),asiento);
-		ocuparAsiento(sector,asiento);
-		guardarEntrada(entradaGenerada, sector);
+				this.sede.calcularPrecioParaEntradaEnSector(this.precioBase, sector),asiento-1);
+		guardarEntrada(entradaGenerada, sector,asiento-1);
 		return entradaGenerada;
 	}
 	
 
-	private void ocuparAsiento(String sector, int asiento) {
-		if(this.espaciosDisponibles.containsKey(sector)) {
-			if(this.espaciosDisponibles.get(sector).remove(asiento)) {
-				return;
-			}
-			throw new RuntimeException("El asiento ya estabaocupado o no existe ");
-		}
-		throw new RuntimeException("El sector ndcado no existe  ");
-	}
 
-	private void guardarEntrada(IEntrada entradaGenerada, String sector) {
+	private void guardarEntrada(IEntrada entradaGenerada, String sector, int lugar) {
 		if(this.entradasPorSectorVendidas.containsKey(sector)) {
-			this.entradasPorSectorVendidas.get(sector).add(entradaGenerada);
+			this.entradasPorSectorVendidas.get(sector).set(lugar, entradaGenerada);
 			return;
 			
 		}
@@ -143,17 +139,35 @@ public class Funcion {
 		funcion.append(") ");
 		ArrayList<Integer> cantidadVendida= new ArrayList<Integer>();
 		for(String sector : this.sede.misSectores()){
-			cantidadVendida.add(this.entradasPorSectorVendidas.get(sector).size());
-
+			cantidadVendida.add(cantidadVendidadEn(sector));
 		}
 		funcion.append(this.sede.formatoFuncion(cantidadVendida));		
 		funcion.append("\n");		
 		return funcion.toString();
 	}
 
+	private Integer cantidadVendidadEn(String sector) {
+		int vendidas =0;
+		for(IEntrada seVendio:this.entradasPorSectorVendidas.get(sector))
+			if(seVendio!=null) {
+				vendidas++;
+			}
+		return vendidas;
+	}
+
 	//podemos agregar una funcion que nos retorne boolean s el sector existe, paraahorrar codigo
 	
-	
+	public LinkedList<IEntrada> entradasVendidas(){
+		LinkedList<IEntrada> entradasYaVendidas = new LinkedList<>();
+		for(String sector:this.sede.misSectores())//paraque se pasan enorden los sectores de ls entradas ya vendidas :)
+			for(IEntrada entrada : this.entradasPorSectorVendidas.get(sector)) {
+				if(entrada!=null)
+					entradasYaVendidas.add(entrada);
+			}
+			
+		return entradasYaVendidas;
+		
+	}
 
 }
 
