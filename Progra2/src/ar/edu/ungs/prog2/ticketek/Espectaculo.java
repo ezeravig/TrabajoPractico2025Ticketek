@@ -100,5 +100,15 @@ public class Espectaculo {
 			todasLasEntradas.addAll(funcion.entradasVendidas());
 		return todasLasEntradas;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder espectaculo = new StringBuilder();
+		espectaculo.append(this.nombre);
+		espectaculo.append(" tiene las Funciones");
+		espectaculo.append(listarFunciones());
+		return espectaculo.toString();
+		
+	}
 
 }

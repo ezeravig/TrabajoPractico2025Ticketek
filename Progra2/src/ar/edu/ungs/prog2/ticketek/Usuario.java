@@ -76,7 +76,14 @@ public class Usuario {
 	}
 	@Override 
 	public String toString() {
-		return email;
+		StringBuilder usuario = new StringBuilder();
+		usuario.append("Nombre: ");
+		usuario.append(this.nombre);
+		usuario.append(" ");
+		usuario.append(this.apellido);
+		usuario.append(" Email: ");
+		usuario.append(this.email);
+		return usuario.toString();
 	}
 	
 }

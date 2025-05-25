@@ -98,7 +98,17 @@ public abstract class Sede  {
 				&& Objects.equals(nombre, other.nombre) && Objects.equals(sectores, other.sectores);
 	}
 	
-	
+	@Override
+	public String toString() {
+		StringBuilder sede = new StringBuilder();
+		sede.append(this.nombre);
+		sede.append(" ubicada en ");
+		sede.append(this.direccion);
+		sede.append(" con capacidad para   personas");
+		sede.insert(sede.length()-11, this.capacidadMaxima);
+		return sede.toString();
+		
+	}
    
 }
 
