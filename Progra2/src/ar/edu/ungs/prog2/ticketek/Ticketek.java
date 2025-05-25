@@ -205,14 +205,15 @@ public class Ticketek implements ITicketek {
 		Espectaculo elEspectaculo = validarEspectaculo(nombreEspectaculo);
 		Fecha laFecha = validarFecha(fecha);
 		Funcion laFuncion = validarFuncion(elEspectaculo, laFecha);
-		
-		return 0;
+		return laFuncion.valorEntrada("CAMPO");
 	}
 
 	@Override
 	public double costoEntrada(String nombreEspectaculo, String fecha, String sector) {
-		// TODO Auto-generated method stub
-		return 0;
+		Espectaculo elEspectaculo = validarEspectaculo(nombreEspectaculo);
+		Fecha laFecha = validarFecha(fecha);
+		Funcion laFuncion = validarFuncion(elEspectaculo, laFecha);
+		return laFuncion.valorEntrada(sector);
 	}
 
 	@Override

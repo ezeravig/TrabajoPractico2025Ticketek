@@ -179,6 +179,10 @@ public class Funcion {
 		throw new RuntimeException("El lugar ya estaba des ocupado la Entrada no era valida");
 	}
 
+	public double valorEntrada(String sector) {
+		return this.sede.calcularPrecioParaEntradaEnSector(precioBase, sector);
+	}
+
 }
 
 
