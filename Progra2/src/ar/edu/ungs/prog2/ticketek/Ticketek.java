@@ -153,29 +153,59 @@ public class Ticketek implements ITicketek {
 		if(!laEntrada.esFutura()) {
 			return false;
 		}
-		Usuario usuarioDueño = validarUsuario(laEntrada.miComprador(), contrasenia);//la Entrada tiene a su usuario
-		laAnule &= usuarioDueño.anularEntrada(laEntrada, contrasenia);
 		Espectaculo espectDeLaEntrada = validarEspectaculo(laEntrada.miEspectaulo());
 		Funcion funcionDeLaEntrada = validarFuncion(espectDeLaEntrada, laEntrada.cuandoEs());
 		laAnule &= funcionDeLaEntrada.anularEntrada(laEntrada);
+		Usuario usuarioDueño = validarUsuario(laEntrada.miComprador(), contrasenia);//la Entrada tiene a su usuario
+		laAnule &= usuarioDueño.anularEntrada(laEntrada, contrasenia);
 		return laAnule;
 	}
 
 	@Override
 	public IEntrada cambiarEntrada(IEntrada entrada, String contrasenia, String fecha, String sector, int asiento) {
-		// TODO Auto-generated method stub
-		return null;
+		Entrada laEntradaAnular = (Entrada)entrada;
+		if(!laEntradaAnular.esFutura()) {
+			throw new RuntimeException("la Entrada que quiere cancelar ya ocurrio y no puede ser cancelada");
+		}
+		Fecha laNuevaFecha = validarFecha(fecha);
+		Usuario comprador = validarUsuario(laEntradaAnular.miComprador(), contrasenia);
+		Espectaculo espectaculoDeEntrda = validarEspectaculo(laEntradaAnular.miEspectaulo());
+		Funcion laFuncionACambiar = validarFuncion(espectaculoDeEntrda, laNuevaFecha);
+		if(!laFuncionACambiar.quedaElAsiento(sector, asiento)) {
+			throw new RuntimeException("El asiento "+asiento+" del sector "+sector+
+					" no esta disponible enlafuncion de la fecha: "+fecha);
+		}
+		anularEntrada(laEntradaAnular, contrasenia);
+		IEntrada nuevaEntrada = laFuncionACambiar.venderEntrada(laEntradaAnular.miEspectaulo(), laNuevaFecha, sector, laEntradaAnular.miComprador(), asiento);
+		comprador.entradaComprada((Entrada)nuevaEntrada);
+		return nuevaEntrada;
 	}
 
 	@Override
 	public IEntrada cambiarEntrada(IEntrada entrada, String contrasenia, String fecha) {
-		// TODO Auto-generated method stub
-		return null;
+		Entrada laEntradaAnular = (Entrada)entrada;
+		if(!laEntradaAnular.esFutura()) {
+			throw new RuntimeException("la Entrada que quiere cancelar ya ocurrio y no puede ser cancelada");
+		}
+		Fecha laNuevaFecha = validarFecha(fecha);
+		Usuario comprador = validarUsuario(laEntradaAnular.miComprador(), contrasenia);
+		Espectaculo espectaculoDeEntrda = validarEspectaculo(laEntradaAnular.miEspectaulo());
+		Funcion laFuncionACambiar = validarFuncion(espectaculoDeEntrda, new Fecha(fecha));
+		if(!laFuncionACambiar.quedanEntradas(1)) {
+			throw new RuntimeException("la funcion de lafecha "+fecha+" no tiene lugar");
+		}
+		anularEntrada(laEntradaAnular, contrasenia);
+		IEntrada nuevaEntrada = laFuncionACambiar.venderEntrada(laEntradaAnular.miEspectaulo(), laNuevaFecha, "CAMPO", laEntradaAnular.miComprador());
+		comprador.entradaComprada((Entrada)nuevaEntrada);
+		return nuevaEntrada;
 	}
 
 	@Override
 	public double costoEntrada(String nombreEspectaculo, String fecha) {
-		// TODO Auto-generated method stub
+		Espectaculo elEspectaculo = validarEspectaculo(nombreEspectaculo);
+		Fecha laFecha = validarFecha(fecha);
+		Funcion laFuncion = validarFuncion(elEspectaculo, laFecha);
+		
 		return 0;
 	}
 

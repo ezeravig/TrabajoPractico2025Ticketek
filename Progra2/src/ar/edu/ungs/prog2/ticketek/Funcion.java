@@ -61,8 +61,7 @@ public class Funcion {
 			if(espacioDisponible>=cantidadEntradas)
 				return true;
 		}
-		System.out.println("termine");
-			return false;
+		return false;
 	}
 
 	public boolean quedanLosAsientos(String sector, int[] asientos) {
