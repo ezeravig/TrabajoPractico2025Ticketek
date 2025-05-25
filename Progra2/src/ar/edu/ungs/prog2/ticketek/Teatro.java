@@ -39,6 +39,11 @@ public class Teatro extends Sede {
 			
 			return st.toString();
 		}
+
+		@Override
+		public double precioExtra() {
+			return 0;
+		}
 	}
 
 

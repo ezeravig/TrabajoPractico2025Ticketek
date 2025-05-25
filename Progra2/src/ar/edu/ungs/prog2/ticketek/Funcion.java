@@ -40,12 +40,12 @@ public class Funcion {
 		// Modificar
 	}
 
-	public int totalrecaudado() {
-
-		// que la sede devuelva el total recaudado, de acuerdo al precio base de la
-		// funcion
-
-		return 0;
+	public double totalrecaudado() {
+		double totalRecaudado = 0;
+		for(String secto:this.sede.misSectores()) {
+			totalRecaudado += cantidadVendidadEn(secto)*valorEntrada(secto);
+		}
+		return totalRecaudado;
 	}
 
 	public Sede miSede() {
@@ -81,7 +81,7 @@ public class Funcion {
 	public IEntrada venderEntrada(String nombreEspectaculo, Fecha laFecha, String sector, String usuarioComprador) {
 		int espacioDisponibleParaCodigo = buscarEspacioDisponible();
 		Entrada entradaGenerada = new Entrada(nombreEspectaculo, laFecha,this.sede.getNombre(), sector, espacioDisponibleParaCodigo,0, usuarioComprador,
-				this.sede.calcularPrecioParaEntradaEnSector(this.precioBase, "CAMPO"),espacioDisponibleParaCodigo);
+				valorEntrada("CAMPO"),espacioDisponibleParaCodigo);
 		//en asento pongo eso por que sino no funciona el hash set, pero comoel sector es campo el asiento no se usa enlaubicacion
 		guardarEntrada(entradaGenerada, "CAMPO",espacioDisponibleParaCodigo);
 		return (IEntrada) entradaGenerada;
@@ -102,7 +102,7 @@ public class Funcion {
 	public IEntrada venderEntrada(String nombreEspectaculo, Fecha laFecha, String sector, String usuarioComprador,int asiento) {
 		int fila = this.sede.buscarFila(asiento, sector);
 		Entrada entradaGenerada = new Entrada(nombreEspectaculo, laFecha,this.sede.getNombre(), sector, asiento, fila, usuarioComprador,
-				this.sede.calcularPrecioParaEntradaEnSector(this.precioBase, sector),asiento-1);
+				valorEntrada(sector),asiento-1);
 		guardarEntrada(entradaGenerada, sector,asiento-1);
 		return entradaGenerada;
 	}
@@ -180,7 +180,11 @@ public class Funcion {
 	}
 
 	public double valorEntrada(String sector) {
-		return this.sede.calcularPrecioParaEntradaEnSector(precioBase, sector);
+		return this.sede.calcularPrecioParaEntradaEnSector(this.precioBase, sector)+this.sede.precioExtra();
+	}
+
+	public boolean esEnLaSede(Sede laSede) {
+		return this.sede.equals(laSede);
 	}
 
 }

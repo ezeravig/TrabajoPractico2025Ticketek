@@ -1,6 +1,7 @@
 package ar.edu.ungs.prog2.ticketek;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public abstract class Sede  {
 	protected int capacidadMaxima;
@@ -76,6 +77,28 @@ public abstract class Sede  {
 		}
 		throw new RuntimeException("no existe ese sector en la sede");
 	}
+	
+	public abstract double precioExtra() ;
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(capacidadMaxima, direccion, nombre, sectores);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Sede other = (Sede) obj;
+		return capacidadMaxima == other.capacidadMaxima && Objects.equals(direccion, other.direccion)
+				&& Objects.equals(nombre, other.nombre) && Objects.equals(sectores, other.sectores);
+	}
+	
+	
    
 }
 

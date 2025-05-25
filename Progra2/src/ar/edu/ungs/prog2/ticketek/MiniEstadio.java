@@ -54,6 +54,11 @@ public class MiniEstadio extends Sede {
 			return st.toString();
 		}
 
+		@Override
+		public double precioExtra() {
+			return this.precioConsumicion;
+		}
+
 }
 
 

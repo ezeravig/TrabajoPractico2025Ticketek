@@ -54,6 +54,13 @@ public class EstadioFutbol extends Sede {
 
 
 
+	@Override
+	public double precioExtra() {
+		return 0;
+	}
+
+
+
 	
 
 

@@ -67,10 +67,10 @@ public class Ticketek implements ITicketek {
 	@Override
 	public void agregarFuncion(String nombreEspectaculo, String fecha, String sede, double precioBase) {
 		Espectaculo espectaculoSolicitado = validarEspectaculo(nombreEspectaculo);//si no existe el espectaculo arroja error 
-		Sede lasede = existeLaSede(sede);// si la sede no existe genera una exepcion
+		Sede laSede = existeLaSede(sede);// si la sede no existe genera una exepcion
 		Fecha laFecha = validarFecha(fecha);//Fijarse que la fecha tenga el formato correcto
 		sedeDisponibleEnFecha(laFecha,sede);//Chequea que la sede este disponible esa fecha y no haya otro espectaculo
-		espectaculoSolicitado.agregarFuncion(laFecha, lasede, precioBase);
+		espectaculoSolicitado.agregarFuncion(laFecha, laSede, precioBase);
 	}
 
 	@Override
@@ -218,14 +218,15 @@ public class Ticketek implements ITicketek {
 
 	@Override
 	public double totalRecaudado(String nombreEspectaculo) {
-		// TODO Auto-generated method stub
-		return 0;
+		Espectaculo elEspectaculo = validarEspectaculo(nombreEspectaculo);
+		return elEspectaculo.consultarTotalRecaudado();
 	}
 
 	@Override
 	public double totalRecaudadoPorSede(String nombreEspectaculo, String nombreSede) {
-		// TODO Auto-generated method stub
-		return 0;
+		Espectaculo elEspectaculo = validarEspectaculo(nombreEspectaculo);
+		Sede laSede = existeLaSede(nombreSede);
+		return elEspectaculo.totalRecaudadoPorSede(laSede);
 	}
 	
 

@@ -40,10 +40,18 @@ public class Espectaculo {
 		return funDisponibles;
 	}
 
-	public int consultarTotalRecaudado() {
-		int acum = 0;
-		for (Funcion fun : funciones.values()) {
+	public double consultarTotalRecaudado() {
+		double acum = 0;
+		for (Funcion fun : this.funciones.values()) {
 			acum += fun.totalrecaudado();
+		}
+		return acum;
+	}
+	public double totalRecaudadoPorSede(Sede laSede) {
+		double acum = 0;
+		for (Funcion fun : this.funciones.values()) {
+			if(fun.esEnLaSede(laSede))
+				acum += fun.totalrecaudado();
 		}
 		return acum;
 	}
@@ -92,4 +100,5 @@ public class Espectaculo {
 			todasLasEntradas.addAll(funcion.entradasVendidas());
 		return todasLasEntradas;
 	}
+
 }
