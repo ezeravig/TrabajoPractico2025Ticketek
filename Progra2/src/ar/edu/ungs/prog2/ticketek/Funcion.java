@@ -3,10 +3,9 @@ package ar.edu.ungs.prog2.ticketek;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Set;
+
 
 public class Funcion {
 
@@ -35,9 +34,7 @@ public class Funcion {
 	}
 
 	public Fecha getFecha() {
-		// TODO Auto-generated method stub
 		return fecha;
-		// Modificar
 	}
 
 	public double totalrecaudado() {
@@ -141,8 +138,7 @@ public class Funcion {
 		for(String sector : this.sede.misSectores()){
 			cantidadVendida.add(cantidadVendidadEn(sector));
 		}
-		funcion.append(this.sede.formatoFuncion(cantidadVendida));		
-		funcion.append("\n");		
+		funcion.append(this.sede.formatoFuncion(cantidadVendida));				
 		return funcion.toString();
 	}
 

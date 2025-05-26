@@ -311,13 +311,13 @@ public class Ticketek implements ITicketek {
 		tk.append(usuario.toString());
 		tk.append("\n");
 	}
-	tk.append("Sedes Registradas:\n");
+	tk.append("\nSedes Registradas:\n");
 	for(Sede sede:this.Sedes.values()) {
 		tk.append(" - ");
 		tk.append(sede.toString());
 		tk.append("\n");
 	}
-	tk.append("Espectaculos Registrados:\n");
+	tk.append("\nEspectaculos Registrados:\n");
 	for(Espectaculo espectaculo:this.Espectaculos.values()) {
 		tk.append(" - ");
 		tk.append(espectaculo.toString());

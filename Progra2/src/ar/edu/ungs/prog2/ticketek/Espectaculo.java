@@ -90,6 +90,7 @@ public class Espectaculo {
 		StringBuilder listado = new StringBuilder();
 		for(Funcion funcion: this.funciones.values()) {
 			listado.append(funcion.toString());
+			listado.append("\n");
 		}
 		return listado.toString();
 	}
@@ -105,10 +106,21 @@ public class Espectaculo {
 	public String toString() {
 		StringBuilder espectaculo = new StringBuilder();
 		espectaculo.append(this.nombre);
-		espectaculo.append(" tiene las Funciones\n");
-		espectaculo.append(listarFunciones());
+		espectaculo.append(" tiene las siguientes  Funciones\n");
+		espectaculo.insert(espectaculo.length()-11, funciones.size());
+		espectaculo.append(listarFuncionesYLoRecaudado());
 		return espectaculo.toString();
 		
+	}
+	public String listarFuncionesYLoRecaudado() {
+		StringBuilder listado = new StringBuilder();
+		for(Funcion funcion: this.funciones.values()) {
+			listado.append(funcion.toString());
+			listado.append(" | Total recaudado: ");
+			listado.append(funcion.totalrecaudado());
+			listado.append("\n");
+		}
+		return listado.toString();
 	}
 
 }
