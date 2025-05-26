@@ -5,7 +5,7 @@ import java.util.Objects;
 public class Entrada implements IEntrada {
 
 
-	    private String codigo;
+	    private int codigo;
 	    private String espectaculo;
 	    private Fecha fecha;
 	    private String ubicacion;
@@ -27,7 +27,7 @@ public class Entrada implements IEntrada {
 			this.usuarioComprador = usuarioComprador;
 			this.precio = precio;
 			this.sede =sede;
-			this.codigo = codigo+"";
+			this.codigo = codigo;
 		}
 	    
 	@Override
@@ -77,8 +77,8 @@ public class Entrada implements IEntrada {
 		return !fecha.yaPaso();
 		//Cambiar	
 		}
-	public String getCodigo() {
-		return "";
+	public int getCodigo() {
+		return this.codigo;
 		//Cambiar	
 	}
 

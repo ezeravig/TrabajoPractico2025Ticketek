@@ -81,7 +81,7 @@ public class Usuario {
 		usuario.append(this.nombre);
 		usuario.append(" ");
 		usuario.append(this.apellido);
-		usuario.append(" Email: ");
+		usuario.append(" | Email: ");
 		usuario.append(this.email);
 		return usuario.toString();
 	}

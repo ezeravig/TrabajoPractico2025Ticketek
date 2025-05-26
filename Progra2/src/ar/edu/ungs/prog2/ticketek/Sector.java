@@ -43,7 +43,12 @@ public class Sector {
 
 		public int cualFilaEs(int asiento) {
 			if(asiento<this.capacidadMaxima) {
-				int fila =  (int)Math.ceil(this.capacidadMaxima/asientosPorFila);
+				int fila =  1;
+				int recorridos = this.asientosPorFila;
+				while(asiento>recorridos) {
+					fila++;
+					recorridos += this.asientosPorFila;
+				}
 				return fila;
 			}else
 				throw new IllegalArgumentException(this.nombre+" no tiene elasiento "+asiento+" por que cuenta con "+this.capacidadMaxima+" asientos");

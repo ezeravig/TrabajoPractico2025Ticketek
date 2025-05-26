@@ -170,13 +170,13 @@ public class Funcion {
 	}
 
 	public boolean anularEntrada(Entrada laEntrada) {
-		int lugarDeEntrada = laEntrada.cualEsMiEspacio();
+		int lugarDeEntrada = laEntrada.getCodigo();
 		String sector = laEntrada.cualSectorEstoy();
-		if(this.entradasPorSectorVendidas.get(sector).get(lugarDeEntrada).equals(laEntrada)) {
+		if(this.entradasPorSectorVendidas.get(sector).get(lugarDeEntrada)!=null) {
 			this.entradasPorSectorVendidas.get(sector).set(lugarDeEntrada,null);
 			return true;
 		}
-		throw new RuntimeException("El lugar ya estaba des ocupado la Entrada no era valida");
+		throw new RuntimeException("El lugar ya estaba desocupado la Entrada no era valida");
 	}
 
 	public double valorEntrada(String sector) {

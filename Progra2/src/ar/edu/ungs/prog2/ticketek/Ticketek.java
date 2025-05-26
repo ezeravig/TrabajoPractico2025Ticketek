@@ -305,23 +305,23 @@ public class Ticketek implements ITicketek {
 	@Override
 	public String toString() {
 	StringBuilder tk = new StringBuilder();	
-	tk.append("Usuarios Registrados:/n");
+	tk.append("Usuarios Registrados:\n");
 	for(Usuario usuario:this.Usuarios.values()) {
 		tk.append(" - ");
 		tk.append(usuario.toString());
-		tk.append("/n");
+		tk.append("\n");
 	}
-	tk.append("Sedes Registradas:/n");
+	tk.append("Sedes Registradas:\n");
 	for(Sede sede:this.Sedes.values()) {
 		tk.append(" - ");
 		tk.append(sede.toString());
-		tk.append("/n");
+		tk.append("\n");
 	}
-	tk.append("Espectaculos Registrados:/n");
+	tk.append("Espectaculos Registrados:\n");
 	for(Espectaculo espectaculo:this.Espectaculos.values()) {
 		tk.append(" - ");
 		tk.append(espectaculo.toString());
-		tk.append("/n");
+		tk.append("\n");
 		
 	}
 		return tk.toString();

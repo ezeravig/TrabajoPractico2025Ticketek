@@ -105,7 +105,7 @@ public class Espectaculo {
 	public String toString() {
 		StringBuilder espectaculo = new StringBuilder();
 		espectaculo.append(this.nombre);
-		espectaculo.append(" tiene las Funciones");
+		espectaculo.append(" tiene las Funciones\n");
 		espectaculo.append(listarFunciones());
 		return espectaculo.toString();
 		

@@ -102,10 +102,10 @@ public abstract class Sede  {
 	public String toString() {
 		StringBuilder sede = new StringBuilder();
 		sede.append(this.nombre);
-		sede.append(" ubicada en ");
+		sede.append(" ubicada en la");
 		sede.append(this.direccion);
-		sede.append(" con capacidad para   personas");
-		sede.insert(sede.length()-11, this.capacidadMaxima);
+		sede.append(". Con capacidad para  personas");
+		sede.insert(sede.length()-9, this.capacidadMaxima);
 		return sede.toString();
 		
 	}
