@@ -2,7 +2,7 @@ package ar.edu.ungs.prog2.ticketek;
 
 import java.util.ArrayList;
 
-public class Teatro extends Sede {
+public class Teatro extends SedeConSectores {
 	
 
 		public Teatro (String nombre, String direccion, int capacidadMaxima, int asientosPorFila, String[] sectores2,

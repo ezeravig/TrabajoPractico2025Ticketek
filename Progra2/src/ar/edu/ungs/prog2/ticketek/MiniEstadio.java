@@ -3,7 +3,7 @@ package ar.edu.ungs.prog2.ticketek;
 
 import java.util.ArrayList;
 
-public class MiniEstadio extends Sede {
+public class MiniEstadio extends SedeConSectores {
 	
 		private int cantidadPuestos;
 	    private int cantidadPuestosComida;

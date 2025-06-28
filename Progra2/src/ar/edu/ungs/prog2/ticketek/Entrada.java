@@ -19,6 +19,14 @@ public class Entrada implements IEntrada {
 	    public Entrada(String espectaculo, Fecha fecha,String sede, String sector,int numAsiento,
 	    		int fila, String usuarioComprador, double precio, int codigo) {
 			super();
+			if(esVacio(espectaculo)||esVacio(sede)||esVacio(sector)||esVacio(usuarioComprador)
+				||!Fecha.esFormatoValido(fecha.toString())) {
+				throw new RuntimeException("Uno de los campos se encuentra vacio, por favor enviarlo completo");
+			}
+			if(numAsiento<0||fila<0||precio<0) {
+				throw new RuntimeException("El dato del asiento o la fila o el precio estan mal, nopueden ser "
+						+ "menor a 0, ingreselos correctamente");
+			}
 			this.espectaculo = espectaculo;
 			this.fecha = fecha;
 			this.sector =sector;
@@ -29,6 +37,10 @@ public class Entrada implements IEntrada {
 			this.sede =sede;
 			this.codigo = codigo;
 		}
+	    
+	private boolean esVacio(String s) {
+		return (s==null||s.isEmpty());
+	}
 	    
 	@Override
 	public double precio() {

@@ -10,6 +10,15 @@ public class Sector {
 	  
 		public Sector(int asientosPorFila, String nombre, int capacidad, int aumentoPrecio) {
 			super();
+			if(nombre==null||nombre.isEmpty()) {
+				throw new RuntimeException("El sector debe tener nombre");
+			}
+			if(asientosPorFila>capacidad) {
+				throw new RuntimeException("El sector no puede tener mas asientos quesu capacidad maxima");
+			}
+			if(aumentoPrecio<0) {
+				throw new RuntimeException("El aumento de preciodbe ser mayoroigual a 0");
+			}
 			this.asientosPorFila = asientosPorFila;
 			this.capacidadMaxima = capacidad;
 			this.aumentoPrecio = aumentoPrecio;	
@@ -19,6 +28,12 @@ public class Sector {
 
 		public Sector(String nombre, int capacidadMaxima, int aumentoPrecio) {
 			super();
+			if(nombre==null||nombre.isEmpty()) {
+				throw new RuntimeException("El sector debe tener nombre");
+			}
+			if(aumentoPrecio<0) {
+				throw new RuntimeException("El aumento de preciodbe ser mayoroigual a 0");
+			}
 			this.nombre = nombre;
 			this.aumentoPrecio = aumentoPrecio;
 			this.capacidadMaxima = capacidadMaxima;

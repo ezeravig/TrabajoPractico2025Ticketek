@@ -15,6 +15,9 @@ public class Usuario {
 	
 	public Usuario(String email, String nombre, String apellido, String contrasenia) {
 		super();
+		if(esVacio(email)||esVacio(nombre)||esVacio(apellido)||esVacio(contrasenia)) {
+			throw new RuntimeException("Unoo varios cmbos estan vacios, por avor completelos ");
+		}
 		this.email = email;
 		this.nombre = nombre;
 		this.apellido = apellido;
@@ -22,6 +25,11 @@ public class Usuario {
 		this.EntradasCompradas = new HashSet<>();
 		
 	}
+	
+	private boolean esVacio(String s) {
+		return (s==null||s.isEmpty());
+	}
+	
 	public List<IEntrada> Consultarentradas(){
 		List<IEntrada> misEntradas = new LinkedList<>();
 		for(Entrada entrada: EntradasCompradas) {

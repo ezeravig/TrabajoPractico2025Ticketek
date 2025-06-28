@@ -20,6 +20,9 @@ public class Funcion {
 
 	public Funcion(Fecha fecha, Sede sede, double precioBase) {
 		super();
+		if(!Fecha.esFormatoValido(fecha.toString())||sede==null||precioBase<0) {
+			throw new RuntimeException("Unode los camposesta vacio o es incorrecto,verifique elformato de la fecha y que el precio no sa negativo");
+		}
 		this.sede = sede;
 		this.fecha = fecha;
 		this.precioBase = precioBase;

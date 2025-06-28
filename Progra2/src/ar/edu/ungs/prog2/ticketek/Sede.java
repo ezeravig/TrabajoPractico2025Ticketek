@@ -1,6 +1,7 @@
 package ar.edu.ungs.prog2.ticketek;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Objects;
 
 public abstract class Sede  {
@@ -8,21 +9,27 @@ public abstract class Sede  {
 	protected String direccion;
 	protected String nombre;
     
-    // De tipo Puede ser un  MiniEstadio, Teatro, EstadioFutbol.
-    
-    protected ArrayList<Sector> sectores;
-    
+   
     
     
     
     public Sede(int capacidadMaxima, String direccion, String nombre) {
 		super();
+		if(capacidadMaxima<=0) {
+			throw new RuntimeException("La capacidad maximano puede ser 0 o menos ");
+		}
+		if(esVacio(direccion)||esVacio(nombre)) {
+			throw new RuntimeException("La capacidad maximano puede ser 0 o menos ");
+		}
 		this.capacidadMaxima = capacidadMaxima;
 		this.direccion = direccion;
 		this.nombre = nombre;
-		this.sectores= new ArrayList<>();
 		
     }
+    
+    private boolean esVacio(String s) {
+		return (s==null||s.isEmpty());
+	}
     
     // Suma lo recaudado por cada sector 
     public double calcularPrecioTotal() {
@@ -45,21 +52,9 @@ public abstract class Sede  {
 
 	
 	
-	public  ArrayList<String> misSectores(){
-		ArrayList<String> losSectores = new ArrayList<>();
-		for(Sector sector:this.sectores) {
-			losSectores.add(sector.getNombre());
-		}
-		return losSectores;
-	}
+	public abstract ArrayList<String> misSectores();
     
-	public int espacioDelSector(String nombreSec) {
-		for(Sector sec:this.sectores) {
-			if(nombreSec.equals(sec.getNombre()))
-				return sec.cualEsMiCapacidad();		
-			}
-		throw new IllegalArgumentException("No existe un sector llamado "+nombreSec+" en la sede "+this.nombre);	
-	}
+	public abstract int espacioDelSector(String nombreSec); 
 
 
 	public int buscarFila(int asiento, String sector) {
@@ -70,19 +65,14 @@ public abstract class Sede  {
 
 	public abstract String formatoFuncion(ArrayList<Integer> cantidadVendida) ;
 	
-	public double calcularPrecioParaEntradaEnSector(double precio,String nombreSec) {
-		for(Sector sec:this.sectores) {
-			if(nombreSec.equals(sec.getNombre()))
-				return sec.calcularPrecio(precio);		
-		}
-		throw new RuntimeException("no existe ese sector en la sede");
-	}
+	public abstract double calcularPrecioParaEntradaEnSector(double precio,String nombreSec) ;
+
 	
 	public abstract double precioExtra() ;
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(capacidadMaxima, direccion, nombre, sectores);
+		return Objects.hash(capacidadMaxima, direccion, nombre);
 	}
 
 	@Override
@@ -95,7 +85,7 @@ public abstract class Sede  {
 			return false;
 		Sede other = (Sede) obj;
 		return capacidadMaxima == other.capacidadMaxima && Objects.equals(direccion, other.direccion)
-				&& Objects.equals(nombre, other.nombre) && Objects.equals(sectores, other.sectores);
+				&& Objects.equals(nombre, other.nombre);
 	}
 	
 	@Override

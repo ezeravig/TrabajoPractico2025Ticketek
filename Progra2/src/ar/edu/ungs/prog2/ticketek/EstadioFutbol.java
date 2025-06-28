@@ -8,7 +8,7 @@ public class EstadioFutbol extends Sede {
 	
 	public EstadioFutbol(String nombre, String direccion, int capacidadMaxima) {
 		super(capacidadMaxima, direccion, nombre);
-		this.sectores.add(new Sector("CAMPO",capacidadMaxima,0));
+		
 		
 	}
 
@@ -61,14 +61,32 @@ public class EstadioFutbol extends Sede {
 
 
 
-	
+	@Override
+	public ArrayList<String> misSectores() {
+		ArrayList<String> campo = new ArrayList<>();
+		campo.add("CAMPO");
+		return campo;
+	}
 
 
 
+	@Override
+	public int espacioDelSector(String nombreSec) {
+		if(nombreSec.equals("CAMPO")) {
+			return this.capacidadMaxima;
+		}
+		throw new RuntimeException("el setor "+nombreSec+" no existe en los estadios de futbol, solo existe el CAMPO");
+	}
 
-	
-	
-	
+
+
+	@Override
+	public double calcularPrecioParaEntradaEnSector(double precio, String nombreSec) {
+		if(nombreSec.equals("CAMPO")) {
+			return precio;
+		}
+		throw new RuntimeException("el setor "+nombreSec+" no existe en los estadios de futbol, solo existe el CAMPO");
+	}
 	
 }
 
